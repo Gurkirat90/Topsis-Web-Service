@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request
 import os
 import re
-from topsis import run_topsis   # make sure this function exists in topsis.py
+import smtplib
+from email.message import EmailMessage
+from topsis import run_topsis
 
 app = Flask(__name__)
 
@@ -11,10 +13,30 @@ RESULT_FOLDER = "results"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(RESULT_FOLDER, exist_ok=True)
 
+EMAIL_ADDRESS = os.environ.get("EMAIL_ADDRESS")
+EMAIL_PASSWORD = os.environ.get("EMAIL_PASSWORD")
+
 def is_valid_email(email):
-    """Validate email format"""
-    pattern = r"^[^@]+@[^@]+\.[^@]+$"
-    return re.match(pattern, email)
+    return re.match(r"^[^@]+@[^@]+\.[^@]+$", email)
+
+def send_email(to_email, attachment_path):
+    msg = EmailMessage()
+    msg["Subject"] = "TOPSIS Result File"
+    msg["From"] = EMAIL_ADDRESS
+    msg["To"] = to_email
+    msg.set_content("Please find attached the TOPSIS result file.")
+
+    with open(attachment_path, "rb") as f:
+        msg.add_attachment(
+            f.read(),
+            maintype="application",
+            subtype="octet-stream",
+            filename="topsis_result.csv"
+        )
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+        server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        server.send_message(msg)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -24,7 +46,7 @@ def index():
         impacts = request.form.get("impacts")
         email = request.form.get("email")
 
-        if not file or not weights or not impacts or not email:
+        if not all([file, weights, impacts, email]):
             return "All fields are required"
 
         if not is_valid_email(email):
@@ -35,19 +57,12 @@ def index():
 
         file.save(input_path)
 
-        # Run TOPSIS
         run_topsis(input_path, weights, impacts, output_path)
+        send_email(email, output_path)
 
-        # Return file for download
-        return send_file(
-            output_path,
-            as_attachment=True,
-            download_name="topsis_result.csv"
-        )
+        return "✅ Result has been sent to your email successfully!"
 
     return render_template("index.html")
 
-
-# REQUIRED FOR RENDER
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
