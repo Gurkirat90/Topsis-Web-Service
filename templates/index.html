@@ -1,25 +1,135 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>TOPSIS Web Service</title>
+    <meta charset="UTF-8">
+    <title>TOPSIS Decision Support System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 520px;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        p {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input[type="file"],
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 18px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: #888;
+            margin-top: -12px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        footer {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            margin-top: 20px;
+        }
+    </style>
 </head>
+
 <body>
-    <h2>TOPSIS Calculator</h2>
+    <div class="container">
+        <h1>TOPSIS Web Service</h1>
+        <p>Rank alternatives using the TOPSIS decision-making technique</p>
 
-    <form method="post" enctype="multipart/form-data">
-        <label>Input File:</label>
-        <input type="file" name="file" required><br><br>
+        <form method="POST" enctype="multipart/form-data">
+            <label>Upload Input CSV File</label>
+            <input type="file" name="file" accept=".csv,.xlsx" required>
 
-        <label>Weights:</label>
-        <input type="text" name="weights" placeholder="1,1,1,1" required><br><br>
+            <label>Weights</label>
+            <input type="text" name="weights" placeholder="0.2,0.15,0.15,0.2,0.15,0.15" required>
+            <div class="hint">Comma-separated numeric values</div>
 
-        <label>Impacts:</label>
-        <input type="text" name="impacts" placeholder="+,+,-,+" required><br><br>
+            <label>Impacts</label>
+            <input type="text" name="impacts" placeholder="-,+,+,+,+,+" required>
+            <div class="hint">Use + for benefit, - for cost</div>
 
-        <label>Email ID:</label>
-        <input type="email" name="email" required><br><br>
+            <label>Email Address</label>
+            <input type="email" name="email" placeholder="example@email.com" required>
+            <div class="hint">Result will be generated after submission</div>
 
-        <button type="submit">Submit</button>
-    </form>
+            <button type="submit">Run TOPSIS & Download Result</button>
+        </form>
+
+        <footer>
+            © 2026 | TOPSIS Decision Support System
+        </footer>
+    </div>
 </body>
 </html>
