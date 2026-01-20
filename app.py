@@ -13,8 +13,9 @@ RESULT_FOLDER = "results"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(RESULT_FOLDER, exist_ok=True)
 
-EMAIL_ADDRESS = gsingh9_be23@gmail.com
-EMAIL_PASSWORD = tuwn uycy psvf ccuo
+EMAIL_ADDRESS = os.environ.get('EMAIL_ADDRESS')
+EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+
 
 def is_valid_email(email):
     return re.match(r"^[^@]+@[^@]+\.[^@]+$", email)
