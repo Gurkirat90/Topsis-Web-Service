@@ -13,7 +13,7 @@ RESULT_FOLDER = "results"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(RESULT_FOLDER, exist_ok=True)
 
-EMAIL_ADDRESS = gs544448@gmail.com
+EMAIL_ADDRESS = gsingh9_be23@gmail.com
 EMAIL_PASSWORD = tuwn uycy psvf ccuo
 
 def is_valid_email(email):
